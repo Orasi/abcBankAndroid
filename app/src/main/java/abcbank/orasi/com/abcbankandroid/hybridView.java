@@ -113,8 +113,5 @@ public class hybridView extends Activity {
         Toast.makeText(this, "Thank you for using abcBank", Toast.LENGTH_SHORT).show();
     }
 
-    public void openSettings(MenuItem item){
-        Intent i = new Intent(this, SettingsActivity.class);
-        startActivity(i);
-    }
+
 }

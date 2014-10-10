@@ -91,6 +91,7 @@ public class SettingsActivity extends PreferenceActivity {
                             backendUrl = input.getText().toString();
                             SharedPreferences.Editor edit = preferences.edit();
                             edit.putString("backend_server",backendUrl);
+                            customUrl.setText(backendUrl);
                             edit.commit();
                             //backendUrl = preferences.getString("backend_server", "");
                             new CheckCustomBackend().execute();

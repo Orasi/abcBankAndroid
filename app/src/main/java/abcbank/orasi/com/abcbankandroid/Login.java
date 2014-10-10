@@ -67,7 +67,6 @@ public class Login extends Activity {
         }else{
             backendUrl = defaultBackend;
         }
-
         //Set On Click Listener for Sign on button to initiate sign in
         sign_in.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -113,12 +112,11 @@ public class Login extends Activity {
         @Override
         //Is executed on end of DoInBackground method
         protected void onPostExecute(String response){
-
+            enableFields();
             //Do In Background will pass error message if needed.
             //Check for error message and display if found
             if (response.contains("error")){
                 Toast.makeText(Login.this, response.replace("error:", ""), Toast.LENGTH_SHORT).show();
-                enableFields();
             }else {
 
                 //Create JSON Object from response from server
@@ -181,7 +179,7 @@ public class Login extends Activity {
                 // Get Response String
                 HttpEntity entity = response.getEntity();
                 str_response = EntityUtils.toString(entity);
-                Thread.sleep(1500);
+                Thread.sleep(1000);
             } catch (ClientProtocolException e) {
                 e.printStackTrace();
                 str_response = "error:Error in HTTP Protocol";
