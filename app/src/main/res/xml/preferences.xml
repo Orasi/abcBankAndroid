@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Application Settings" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="useCustomBackend"
+            android:summary="Allows the user to specify the Server URL"
+            android:title="Use Custom Backend" >
+        </CheckBoxPreference>
+        <EditTextPreference
+            android:title="Set Backend Server URL"
+            android:summary="This option will allow you to set a different server to be used as the backend"
+            android:key="backend_server"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Manage Users" >
+        <ListPreference
+            android:key="delete_user_id"
+            android:summary="This option allows you to reset a user to default values.  This will delete the user and they will be re-initalized on login."
+            android:title="Reset User" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

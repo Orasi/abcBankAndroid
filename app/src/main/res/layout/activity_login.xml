@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="64dp"
+    tools:context=".MainActivity"
+
+    android:background="@drawable/online_banking">
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:background="@drawable/linear_layout_bg"
+        android:layout_centerVertical="true">
+
+        <EditText
+            android:id="@+id/etUserName"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_top_bg"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:padding="10dp"
+            android:hint="Email"
+            android:textColorHint="#cccccc"
+            android:drawableLeft="@drawable/email"/>
+        <EditText
+            android:id="@+id/etPass"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittext_bottom_b2g"
+            android:padding="10dp"
+            android:hint="Password"
+            android:textColorHint="#cccccc"
+            android:password="true"
+            android:drawableLeft="@drawable/password"/>
+        <Button
+            android:id="@+id/btnSingIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_margin="4dp"
+            android:text="Sign In"
+
+            android:background="@drawable/button_default_bg"
+            android:clickable="true" />
+    </LinearLayout>
+
+</RelativeLayout>
