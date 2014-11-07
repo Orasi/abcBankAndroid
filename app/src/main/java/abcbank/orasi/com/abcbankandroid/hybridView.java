@@ -18,6 +18,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
+
+
 public class hybridView extends Activity {
 
     private WebView webView;
@@ -36,7 +38,7 @@ public class hybridView extends Activity {
         webView = (WebView) findViewById(R.id.webView);
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
-        webView.loadUrl(backendUrl + "/users/" + user_id);
+        webView.loadUrl(backendUrl + "/users/" + user_id + "/hybrid");
         webView.setBackgroundColor(0x00000000);
 
         //Override WebView Client
@@ -51,18 +53,11 @@ public class hybridView extends Activity {
 
             //This method is invoked when a page inside the webview is finished loading
             public void onPageFinished(WebView webView, String url){
-                Animation fade_in = AnimationUtils.loadAnimation(hybridView.this, R.anim.fade_in);
-                webView.startAnimation(fade_in);
                 spinner.setVisibility(View.GONE);
             }
 
-            //This method is invoked when a page inside webview begins to load
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                Animation fade_out = AnimationUtils.loadAnimation(hybridView.this, R.anim.fade_out);
-                spinner.setVisibility(View.VISIBLE);
-                webView.startAnimation(fade_out);
-            }
         });
+
 
         //Loading Spinner
         spinner = (ProgressBar) findViewById(R.id.progressBar1);

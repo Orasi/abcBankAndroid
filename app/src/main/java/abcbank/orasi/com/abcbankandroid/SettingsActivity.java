@@ -36,16 +36,19 @@ public class SettingsActivity extends PreferenceActivity {
     private CheckBoxPreference useCustom;
     private EditTextPreference customUrl;
     private String backendUrl;
+    private String defaultBackend;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         backendUrl = getIntent().getStringExtra("backend");
+        defaultBackend = getIntent().getStringExtra("default_backend");
         new UpdateUserList().execute();
         addPreferencesFromResource(R.xml.preferences);
         user_reset = (ListPreference) findPreference("delete_user_id");
         customUrl = (EditTextPreference) findPreference("backend_server");
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        user_reset.setEnabled(false);
 
         //Disable setting url if not using a custom backend.
         if (!preferences.getBoolean("useCustomBackend", false)){
@@ -64,6 +67,22 @@ public class SettingsActivity extends PreferenceActivity {
             }
         });
 
+        customUrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener(){
+
+            @Override
+            public boolean onPreferenceChange(final  Preference preference, Object o){
+                useCustom.setEnabled(false);
+                useCustom.setSelectable(false);
+                customUrl.setEnabled(false);
+                customUrl.setSelectable(false);
+                backendUrl = o.toString();
+                new CheckCustomBackend().execute();
+
+                return true;
+            }
+
+        });
+
         useCustom = (CheckBoxPreference) findPreference("useCustomBackend");
         useCustom.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
@@ -74,7 +93,7 @@ public class SettingsActivity extends PreferenceActivity {
                     useCustom.setEnabled(false);
                     useCustom.setSelectable(false);
                     customUrl.setEnabled(false);
-                    customUrl.setEnabled(false);
+                    customUrl.setSelectable(false);
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(SettingsActivity.this);
 
@@ -110,7 +129,10 @@ public class SettingsActivity extends PreferenceActivity {
                     alert.show();
 
                 }else{
+                    backendUrl = defaultBackend;
                     customUrl.setEnabled(false);
+                    user_reset.setEnabled(false);
+                    new UpdateUserList().execute();
                 }
 
                 return true;
@@ -168,7 +190,7 @@ public class SettingsActivity extends PreferenceActivity {
             //Create connection with login server
             HttpClient httpclient = new DefaultHttpClient();
             //TODO: Move connection parameters to settings menu
-            HttpGet httpGet = new HttpGet("http://10.238.242.230:3000/users.json");
+            HttpGet httpGet = new HttpGet(backendUrl + "/users.json");
 
             try {
                 // Execute HTTP Get Request
@@ -211,7 +233,7 @@ public class SettingsActivity extends PreferenceActivity {
             //Create connection with login server
             HttpClient httpclient = new DefaultHttpClient();
             //TODO: Move connection parameters to settings menu
-            HttpDelete httpDelete = new HttpDelete("http://10.238.242.230:3000/users/" + params[0]);
+            HttpDelete httpDelete = new HttpDelete(backendUrl + "/users/" + params[0]);
 
             try {
                 // Execute HTTP Get Request
@@ -248,6 +270,7 @@ public class SettingsActivity extends PreferenceActivity {
                 Toast.makeText(SettingsActivity.this, "Server Could Not Be Found", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(SettingsActivity.this, "Server Found Successfully", Toast.LENGTH_SHORT).show();
+                new UpdateUserList().execute();
             }
 
         }

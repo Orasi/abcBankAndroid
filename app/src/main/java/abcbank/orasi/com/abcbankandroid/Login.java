@@ -7,11 +7,15 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -42,7 +46,7 @@ public class Login extends Activity {
     private EditText password;
     private Button sign_in;
     private String backendUrl;
-    private String defaultBackend = "http://10.238.242.230:3000";
+    private String defaultBackend = "http://abcbank.orasi.com";
     private SharedPreferences preferences;
 
     @Override
@@ -50,6 +54,7 @@ public class Login extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setupUI(findViewById(R.id.loginView));
 
         //Load preferences
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -62,12 +67,15 @@ public class Login extends Activity {
         sign_in = (Button) findViewById(R.id.btnSingIn);
         username = (EditText) findViewById(R.id.etUserName);
         password = (EditText) findViewById(R.id.etPass);
+
         if (preferences.getBoolean("useCustomBackend", false)){
             backendUrl = preferences.getString("backend_server", defaultBackend);
+            Toast.makeText(Login.this, "Custom Server Being User \n" + backendUrl, Toast.LENGTH_SHORT).show();
         }else{
             backendUrl = defaultBackend;
         }
         //Set On Click Listener for Sign on button to initiate sign in
+
         sign_in.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -238,6 +246,37 @@ public class Login extends Activity {
     public void openSettings(MenuItem item){
         Intent i = new Intent(this, SettingsActivity.class);
         i.putExtra("backend", backendUrl);
+        i.putExtra("default_backend", defaultBackend);
         startActivity(i);
+    }
+    public void setupUI(View view) {
+
+        //Set up touch listener for non-text box views to hide keyboard.
+        if(!(view instanceof EditText)) {
+
+            view.setOnTouchListener(new View.OnTouchListener() {
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(Login.this);
+                    return false;
+                }
+
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+
+                View innerView = ((ViewGroup) view).getChildAt(i);
+
+                setupUI(innerView);
+            }
+        }
+    }
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 }
